@@ -1,4 +1,4 @@
-ID,Nome do Fornecedor,País de Origem,Informações de Contato,Data de Início
+id_fornecedor,nome_do_fornecedor,pais_de_origem,informacoes_de_contato,data_de_inicio
 1,Techtronix,China,email@techtronix.com,2022-01-15
 2,ElectroTech,Japão,info@electrotech.co.jp,2021-11-20
 3,GlobalGadgets,EUA,contact@globalgadgets.com,2022-03-05

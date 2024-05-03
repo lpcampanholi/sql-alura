@@ -112,7 +112,8 @@ CREATE TABLE Pedidos (
   FOREIGN KEY (cliente) REFERENCES Clientes (id_cliente)
 );
 
-INSERT INTO Pedidos (id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estimada)
+INSERT INTO Pedidos
+(id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estimada)
 VALUES
 (1, '2023-08-01', 'Pendente', 150.00, 5, '2023-08-10'),
 (2, '2023-08-02', 'Processando', 280.50, 8, '2023-08-15'),
@@ -267,3 +268,21 @@ VALUES
 (58, 'Projetor Portátil', 'Projetor portátil de alta qualidade', 16, 249.99, 'Unidade', 16, '2021-08-28'),
 (59, 'Impressora a Laser Monocromática', 'Impressora a laser monocromática de alta velocidade', 6, 169.99, 'Unidade', 6, '2021-08-29'),
 (60, 'Servidor de Rede Empresarial', 'Servidor de rede empresarial com suporte 24/7', 19, 1999.99, 'Unidade', 19, '2021-08-30');
+
+CREATE TABLE PedidosGold (
+  id_pedido_gold INT PRIMARY KEY,
+  data_do_pedido_gold DATE,
+  status_gold VARCHAR (50),
+  total_do_pedido_gold DECIMAL (10,2),
+  cliente_gold INT,
+  data_de_envio_estimada_gold DATE,
+  FOREIGN KEY (cliente_gold) REFERENCES Clientes (id_cliente)
+);
+
+INSERT INTO PedidosGold
+(id_pedido_gold, data_do_pedido_gold, status_gold, total_do_pedido_gold, cliente_gold, data_de_envio_estimada_gold)
+SELECT
+id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estimada
+FROM Pedidos
+WHERE total_do_pedido >= 400;
+

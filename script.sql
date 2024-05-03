@@ -67,7 +67,7 @@ ALTER TABLE Produtos
 ADD COLUMN fk_fornecedor INTEGER 
 REFERENCES Fornecedores(id_fornecedor);
 
-
+--Inserir Dados na Tabela Clientes
 INSERT INTO Clientes
 (id_cliente,
 nome_cliente,
@@ -83,3 +83,23 @@ VALUES
 ('2', 'João Santos', 'joao.santos@provedor.com', 'Rua dos Pinheiros, 25'),
 ('3', 'Maria Fernandes', 'maria.fernandes@email.com', 'Rua Santo Antonio, 10'),
 ('4', 'Carlos Pereira', 'carlos.pereira@email.com', 'Av. Rio Branco, 67');
+
+
+--Inserir dados em uma tabela a partir de uma consulta de outra Tabela
+
+CREATE TABLE PedidosGold (
+  id_pedido_gold INT PRIMARY KEY,
+  data_do_pedido_gold DATE,
+  status_gold VARCHAR (50),
+  total_do_pedido_gold DECIMAL (10,2),
+  cliente_gold INT,
+  data_de_envio_estimada_gold DATE,
+  FOREIGN KEY (cliente_gold) REFERENCES Clientes (id_cliente)
+);
+
+INSERT INTO PedidosGold
+(id_pedido_gold, data_do_pedido_gold, status_gold, total_do_pedido_gold, cliente_gold, data_de_envio_estimada_gold)
+SELECT
+id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estimada
+FROM Pedidos
+WHERE total_do_pedido >= 400;

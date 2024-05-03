@@ -1,25 +1,36 @@
+-- Cláusulas
+
+
 -- Trazer os dados da tabela fornecedores
 SELECT * FROM Fornecedores;
 
+
 SELECT * FROM Fornecedores WHERE pais_de_origem = 'China';
+
 
 -- Busca dados únicos, elimina duplicatas
 SELECT DISTINCT cliente FROM Pedidos;
 
+
 CREATE DATABASE BibliotecaDB;
 
+
 CREATE SCHEMA LivroSchema;
+
 
 -- Alterar Tabela, adicionar Coluna
 ALTER TABLE Clientes
 ADD endereco_cliente VARCHAR (250);
 
+
 -- Apaga Tabela
 DROP TABLE Clientes;
+
 
 -- Alterar Tabela, apagar Coluna
 ALTER TABLE Estudantes
 DROP COLUMN idade;
+
 
 CREATE TABLE Clientes (
     id_cliente INT PRIMARY KEY,
@@ -28,11 +39,13 @@ CREATE TABLE Clientes (
     endereco_cliente VARCHAR (250)
 );
 
+
 CREATE TABLE Categorias (
   id_categoria INT PRIMARY KEY,
   nome_categoria VARCHAR (250),
   descricao_categoria TEXT
 );
+
 
 -- Criar tabela com chaves estrangeiras
 CREATE TABLE Produtos (
@@ -44,11 +57,24 @@ CREATE TABLE Produtos (
   unidade VARCHAR (50),
   fornecedor INT,
   data_de_inclusao DATE,
-  FOREIGN KEY (Categoria) REFERENCES categorias (id_categoria),
-  FOREIGN KEY (Fornecedor) REFERENCES fornecedores (id_fornecedor)
+  FOREIGN KEY (categoria) REFERENCES Categorias (id_categoria),
+  FOREIGN KEY (fornecedor) REFERENCES Fornecedores (id_fornecedor)
 );
+
 
 -- Adicionar coluna com chave estrangeira a uma tabela
 ALTER TABLE Produtos
 ADD COLUMN fk_fornecedor INTEGER 
 REFERENCES Fornecedores(id_fornecedor);
+
+
+INSERT INTO Clientes
+(id_cliente,
+nome_cliente,
+informacoes_de_contato
+endereco_cliente)
+VALUES
+('1', 'Ana Silva', 'ana.silva@email.com', 'Rua Flores, 123')
+
+
+INSERT INTO Clientes

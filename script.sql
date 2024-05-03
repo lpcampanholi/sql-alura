@@ -74,7 +74,12 @@ nome_cliente,
 informacoes_de_contato
 endereco_cliente)
 VALUES
-('1', 'Ana Silva', 'ana.silva@email.com', 'Rua Flores, 123')
+('1', 'Ana Silva', 'ana.silva@email.com', 'Rua Flores, 123');
 
 
 INSERT INTO Clientes
+(id_cliente, nome_cliente, informacoes_de_contato, endereco_cliente)
+VALUES
+('2', 'João Santos', 'joao.santos@provedor.com', 'Rua dos Pinheiros, 25'),
+('3', 'Maria Fernandes', 'maria.fernandes@email.com', 'Rua Santo Antonio, 10'),
+('4', 'Carlos Pereira', 'carlos.pereira@email.com', 'Av. Rio Branco, 67');

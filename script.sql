@@ -1,6 +1,5 @@
 -- Cláusulas
 
-
 -- Trazer os dados da tabela fornecedores
 SELECT * FROM Fornecedores;
 
@@ -103,3 +102,6 @@ SELECT
 id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estimada
 FROM Pedidos
 WHERE total_do_pedido >= 400;
+
+-- Trás os nomes a partir da letra C
+SELECT * FROM Clientes WHERE nome_cliente > 'C';

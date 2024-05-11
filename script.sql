@@ -103,12 +103,29 @@ id_pedido, data_do_pedido, status, total_do_pedido, cliente, data_de_envio_estim
 FROM Pedidos
 WHERE total_do_pedido >= 400;
 
--- Trás os nomes a partir da letra C
+-- FILTROS
+
 SELECT * FROM Clientes WHERE nome_cliente > 'C';
 
--- Trás os nomes a partir de data
 SELECT * FROM Pedidos WHERE data_do_pedido > '2023-09-19';
 
 SELECT * FROM Clientes WHERE Idade > 30 AND Sexo <> 'Masculino';
 
 SELECT * FROM Produtos WHERE Nome LIKE 'Computador';
+
+SELECT * FROM Pedidos WHERE total_do_pedido >= 200 AND status = 'Pendente';
+
+SELECT * FROM Pedidos WHERE status = 'Pendente' OR status = 'Processando';
+
+-- Todos os pedidos NÃO pendentes
+SELECT * FROM Pedidos WHERE NOT satatus = 'Pendente';
+
+SELECT * FROM Pedidos WHERE data_de_envio_estimada BETWEEN '2023-08-01' AND '2023-09-01';
+
+-- Ordenar
+SELECT * FROM Produtos WHERE preco_de_compra BETWEEN 200 AND 600 ORDER BY nome_produto;
+
+SELECT nome_produto, descricao, preco_de_compra FROM Produtos WHERE preco_de_compra BETWEEN 200 AND 600 ORDER BY nome_produto;
+
+-- Orderm decrescente
+SELECT * FROM Produtos WHERE preco_de_compra BETWEEN 200 AND 600 ORDER BY fornecedor DESC;

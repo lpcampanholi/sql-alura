@@ -105,3 +105,10 @@ WHERE total_do_pedido >= 400;
 
 -- Trás os nomes a partir da letra C
 SELECT * FROM Clientes WHERE nome_cliente > 'C';
+
+-- Trás os nomes a partir de data
+SELECT * FROM Pedidos WHERE data_do_pedido > '2023-09-19';
+
+SELECT * FROM Clientes WHERE Idade > 30 AND Sexo <> 'Masculino';
+
+SELECT * FROM Produtos WHERE Nome LIKE 'Computador';

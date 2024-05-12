@@ -148,3 +148,4 @@ CREATE TABLE Pedidos (
   descricao VARCHAR (100),
   FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente) ON DELETE CASCADE
 );
+

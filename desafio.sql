@@ -10,6 +10,68 @@ CREATE TABLE Alunos (
   PRIMARY KEY (id_aluno)
 );
 
+-- Criação da tabela Professores
+CREATE TABLE Professores (
+  id_professor INT,
+  nome_professor VARCHAR(250),
+  data_nascimento DATE,
+  genero VARCHAR(50),
+  telefone_contato VARCHAR(100),
+  email VARCHAR(100),
+  PRIMARY KEY (id_professor)
+);
+
+-- Criação da tabela Disciplinas
+CREATE TABLE Disciplinas (
+  id_disciplina INT,
+  nome_disciplina VARCHAR(100),
+  descricao VARCHAR(250),
+  carga_horaria INT,
+  id_professor INT,
+  PRIMARY KEY (id_disciplina),
+  FOREIGN KEY (id_professor) REFERENCES Professores(id_professor)
+);
+
+-- Criação da tabela Turmas
+CREATE TABLE Turmas (
+  id_turma INT,
+  nome_turma VARCHAR(50),
+  ano_letivo INT,
+  id_professor_orientador INT,
+  PRIMARY KEY (id_turma),
+  FOREIGN KEY (id_professor_orientador) REFERENCES Professores(id_professor)    
+);
+
+-- Criação da tabela Turmas_Disciplinas
+CREATE TABLE Turmas_Disciplinas (
+  id_turma INT,
+  id_disciplina INT,
+  PRIMARY KEY (id_turma, id_disciplina),
+  FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma),
+  FOREIGN KEY (id_disciplina) REFERENCES Disciplinas(id_disciplina)
+);
+
+-- Criação da tabela Turmas_Alunos
+CREATE TABLE Turmas_Alunos (
+  id_turma INT,
+  id_aluno INT,
+  PRIMARY KEY (id_turma, id_aluno),
+  FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma),
+  FOREIGN KEY (id_aluno) REFERENCES Alunos(id_aluno)
+);
+
+-- Criação da tabela Notas
+CREATE TABLE Notas (
+  id_nota INT,
+  id_aluno INT,
+  id_disciplina INT,
+  valor_nota DECIMAl(4,2),
+  data_avaliacao DATE,
+  PRIMARY KEY (id_nota),
+  FOREIGN KEY (id_aluno) REFERENCES Alunos(id_aluno),
+  FOREIGN KEY (id_disciplina) REFERENCES Disciplinas(id_disciplina)
+);
+
 -- Inserção de dados na tabela Alunos
 INSERT INTO Alunos (id_aluno, nome_aluno, data_nascimento, genero, endereco, telefone_contato, email) VALUES
 (1, 'João Silva', '2005-03-15', 'Masculino', 'Rua das Flores, 123', '(11) 9876-5432', 'joao@email.com'),
@@ -31,17 +93,6 @@ INSERT INTO Alunos (id_aluno, nome_aluno, data_nascimento, genero, endereco, tel
 (17, 'Vinícius Santos', '2003-07-28', 'Masculino', 'Avenida da Amizade, 123', '(11) 8901-2345', 'vinicius@email.com'),
 (18, 'Juliana Pereira', '2006-09-01', 'Feminino', 'Rua das Rosas, 789', '(11) 3456-7890', 'juliana@email.com');
 
--- Criação da tabela Professores
-CREATE TABLE Professores (
-  id_professor INT,
-  nome_professor VARCHAR(250),
-  data_nascimento DATE,
-  genero VARCHAR(50),
-  telefone_contato VARCHAR(100),
-  email VARCHAR(100),
-  PRIMARY KEY (id_professor)
-);
-
 -- Inserção de dados na tabela Professores
 INSERT INTO Professores (id_professor, nome_professor, data_nascimento, genero, telefone_contato, email) VALUES
 (1, 'Ana Oliveira', '1980-05-25', 'Feminino', '(11) 1234-5678', 'ana@email.com'),
@@ -49,17 +100,6 @@ INSERT INTO Professores (id_professor, nome_professor, data_nascimento, genero, 
 (3, 'Mariana Santos', '1982-03-15', 'Feminino', '(11) 3456-7890', 'mariana@email.com'),
 (4, 'Ricardo Silva', '1978-08-20', 'Masculino', '(11) 7890-1234', 'ricardo@email.com'),
 (5, 'Fernanda Lima', '1985-01-30', 'Feminino', '(11) 4567-8901', 'fernanda@email.com');
-
--- Criação da tabela Disciplinas
-CREATE TABLE Disciplinas (
-  id_disciplina INT,
-  nome_disciplina VARCHAR(100),
-  descricao VARCHAR(250),
-  carga_horaria INT,
-  id_professor INT,
-  PRIMARY KEY (id_disciplina),
-  FOREIGN KEY (id_professor) REFERENCES Professores(id_professor)
-);
 
 -- Inserção de dados na tabela Disciplinas
 INSERT INTO Disciplinas (id_disciplina, nome_disciplina, descricao, carga_horaria, id_professor) VALUES
@@ -70,16 +110,6 @@ INSERT INTO Disciplinas (id_disciplina, nome_disciplina, descricao, carga_horari
 (5, 'Inglês', 'Aulas de inglês para iniciantes', 45, 4),
 (6, 'Artes', 'Exploração da criatividade artística', 30, 5);
 
--- Criação da tabela Turmas
-CREATE TABLE Turmas (
-  id_turma INT,
-  nome_turma VARCHAR(50),
-  ano_letivo INT,
-  id_professor_orientador INT,
-  PRIMARY KEY (id_turma),
-  FOREIGN KEY (id_professor_orientador) REFERENCES Professores(id_professor)    
-);
-
 -- Inserção de dados na tabela Turmas
 INSERT INTO Turmas (id_turma, nome_turma, ano_letivo, id_professor_orientador) VALUES
 (1, 'Turma A', 2023, 1),
@@ -87,15 +117,6 @@ INSERT INTO Turmas (id_turma, nome_turma, ano_letivo, id_professor_orientador) V
 (3, 'Turma C', 2023, 3),
 (4, 'Turma D', 2023, 4),
 (5, 'Turma E', 2023, 5);
-
--- Criação da tabela Turmas_Disciplinas
-CREATE TABLE Turmas_Disciplinas (
-  id_turma INT,
-  id_disciplina INT,
-  PRIMARY KEY (id_turma, id_disciplina),
-  FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma),
-  FOREIGN KEY (id_disciplina) REFERENCES Disciplinas(id_disciplina)
-);
 
 -- Inserção de dados na tabela Turmas_Disciplinas
 INSERT INTO Turmas_Disciplinas (id_turma, id_disciplina) VALUES
@@ -107,15 +128,6 @@ INSERT INTO Turmas_Disciplinas (id_turma, id_disciplina) VALUES
 (1 ,3),
 (2 ,1),
 (3 ,2);
-
--- Criação da tabela Turmas_Alunos
-CREATE TABLE Turmas_Alunos (
-  id_turma INT,
-  id_aluno INT,
-  PRIMARY KEY (id_turma, id_aluno),
-  FOREIGN KEY (id_turma) REFERENCES Turmas(id_turma),
-  FOREIGN KEY (id_aluno) REFERENCES Alunos(id_aluno)
-);
 
 -- Inserção de dados na tabela Turmas_Alunos
 INSERT INTO Turmas_Alunos (id_turma, id_aluno) VALUES
@@ -129,18 +141,6 @@ INSERT INTO Turmas_Alunos (id_turma, id_aluno) VALUES
 (3, 8),
 (4, 9),
 (5, 10);
-
--- Criação da tabela Notas
-CREATE TABLE Notas (
-  id_nota INT,
-  id_aluno INT,
-  id_disciplina INT,
-  valor_nota DECIMAl(4,2),
-  data_avaliacao DATE,
-  PRIMARY KEY (id_nota),
-  FOREIGN KEY (id_aluno) REFERENCES Alunos(id_aluno),
-  FOREIGN KEY (id_disciplina) REFERENCES Disciplinas(id_disciplina)
-);
 
 -- Inserção de dados na tabela Notas
 INSERT INTO Notas (id_nota, id_disciplina, id_aluno, valor_nota, data_avaliacao) VALUES

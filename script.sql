@@ -73,7 +73,6 @@ VALUES
 ('4', 'Carlos Pereira', 'carlos.pereira@email.com', 'Av. Rio Branco, 67');
 
 --Inserir dados em uma tabela a partir de uma consulta de outra Tabela
-
 CREATE TABLE PedidosGold (
   id_pedido_gold INT PRIMARY KEY,
   data_do_pedido_gold DATE,
@@ -92,7 +91,6 @@ FROM Pedidos
 WHERE total_do_pedido >= 400;
 
 -- FILTROS
-
 SELECT * FROM Clientes WHERE nome_cliente > 'C';
 
 SELECT * FROM Pedidos WHERE data_do_pedido > '2023-09-19';

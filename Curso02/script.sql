@@ -50,3 +50,12 @@ AND ano_publicacao > 2000
 AND editora IS NULL
 ORDER BY ano_publicacao DESC
 LIMIT 20;
+
+-- MIN / MAX
+SELECT mes, MAX(faturamento_bruto) FROM faturamento;
+
+-- SUM
+SELECT SUM(numero_novos_clientes) AS 'Novos clientes 2023' FROM faturamento
+WHERE mes LIKE '%2023';
+
+

@@ -58,4 +58,10 @@ SELECT mes, MAX(faturamento_bruto) FROM faturamento;
 SELECT SUM(numero_novos_clientes) AS 'Novos clientes 2023' FROM faturamento
 WHERE mes LIKE '%2023';
 
+-- COUNT 
+SELECT COUNT(*) FROM HistoricoEmprego
+WHERE datatermino NOT NULL;
+
+SELECT COUNT(*) FROM Licencas
+WHERE tipolicenca = 'FÉRIAS';
 

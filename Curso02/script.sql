@@ -78,3 +78,26 @@ SELECT instituicao, COUNT(curso)
 FROM Treinamento
 GROUP BY instituicao
 HAVING COUNT(curso) > 2;
+
+-- FUNÇÕES DE STRINGS
+
+SELECT nome, LENGTH(cpf) qtd
+FROM Colaboradores
+WHERE qtd != 11;
+
+SELECT COUNT(*), LENGTH(cpf) qtd
+FROM Colaboradores
+WHERE qtd = 11;
+
+SELECT ('A pessoa colaboradora ' || nome || ' de CPF ' || cpf || ' possui o seguinte endereço: ' || endereco) AS texto
+FROM Colaboradores;
+
+-- UPPER / LOWER para Strings
+
+SELECT id_colaborador, STRFTIME('%Y/%m', datainicio)
+FROM Licencas;
+
+SELECT id_colaborador, JULIANDAY(datatermino) - JULIANDAY (datacontratacao) as dias_trabalhados
+FROM HistoricoEmprego
+WHERE DataTermino IS NOT NULL
+ORDER BY dias_trabalhados DESC;

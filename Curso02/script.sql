@@ -58,10 +58,23 @@ SELECT mes, MAX(faturamento_bruto) FROM faturamento;
 SELECT SUM(numero_novos_clientes) AS 'Novos clientes 2023' FROM faturamento
 WHERE mes LIKE '%2023';
 
+-- AVG (AVERAGE = MÉDIA)
+SELECT AVG(despesas) FROM faturamento;
+
+SELECT AVG(lucro_liquido) FROM faturamento;
+
 -- COUNT 
 SELECT COUNT(*) FROM HistoricoEmprego
 WHERE datatermino NOT NULL;
 
 SELECT COUNT(*) FROM Licencas
-WHERE tipolicenca = 'FÉRIAS';
+WHERE tipolicenca = 'férias';
 
+-- GROUP BY 
+SELECT parentesco, COUNT(*) FROM Dependentes
+GROUP BY parentesco;
+
+SELECT instituicao, COUNT(curso)
+FROM Treinamento
+GROUP BY instituicao
+HAVING COUNT(curso) > 2;

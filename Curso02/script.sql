@@ -94,6 +94,8 @@ FROM Colaboradores;
 
 -- UPPER / LOWER para Strings
 
+-- FUNÇÕES DE DATAS
+
 SELECT id_colaborador, STRFTIME('%Y/%m', datainicio)
 FROM Licencas;
 
@@ -101,3 +103,25 @@ SELECT id_colaborador, JULIANDAY(datatermino) - JULIANDAY (datacontratacao) as d
 FROM HistoricoEmprego
 WHERE DataTermino IS NOT NULL
 ORDER BY dias_trabalhados DESC;
+
+-- FUNÇÕES NUMÉRICAS
+
+SELECT AVG(faturamento_bruto), ROUND(AVG(faturamento_bruto), 2) FROM faturamento;
+
+SELECT CEIL(faturamento_bruto), CEIL(despesas) from faturamento;
+
+SELECT FLOOR(faturamento_bruto), FLOOR(despesas) from faturamento;
+
+-- FUNÇÕES DE CONVERSÃO
+SELECT ('O faturamento bruto médio foi ' || CAST(ROUND (AVG(faturamento_bruto), 2) AS TEXT))
+FROM faturamento;
+
+-- CASE
+SELECT id_colaborador, cargo, salario,
+CASE
+WHEN salario < 3000 THEN 'Baixo'
+WHEN salario BETWEEN 3000 AND 6000 THEN 'Médio'
+ELSE 'Alto'
+END AS categoria_salario
+FROM HistoricoEmprego;
+

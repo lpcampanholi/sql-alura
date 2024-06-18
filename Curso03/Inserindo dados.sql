@@ -541,7 +541,7 @@ INSERT INTO Pedidos ('ID','IDCliente','DataHoraPedido','Status') VALUES
  ('449','6','2023-10-06 09:45:00','Concluído'), 
  ('450','8','2023-10-06 10:30:00','Entregue');
 
- INSERT INTO itenspedidos ('IDPedido','IDProduto','Quantidade','PrecoUnitario') VALUES 
+ INSERT INTO itensdepedidos ('IDPedido','IDProduto','Quantidade','PrecoUnitario') VALUES 
  ('1','5','1','2.00'), 
  ('1','2','2','7.00'), 
  ('2','12','3','13.50'), 

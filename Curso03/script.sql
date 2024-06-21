@@ -149,3 +149,27 @@ SELECT * FROM ViewValorTotalPedido
 WHERE strftime('%m', datahorapedido) = '08';
 
 DROP VIEW ViewTelefonesClientes;
+
+
+-- TRIGGER
+
+CREATE TABLE Faturamentodiario (
+  Dia DATE,
+  FaturamentoTotal DECIMAL (10,2)
+  );
+
+CREATE TRIGGER CalculaFaturamentoDiario
+AFTER INSERT ON itensdepedidos
+FOR EACH ROW
+BEGIN
+DELETE FROM Faturamentodiario;
+INSERT INTO Faturamentodiario (Dia, faturamentototal)
+select DATE(p.datahorapedido) AS Dia, SUM(ip.precounitario) AS FaturamentoDiário
+from pedidos p
+JOIN itensdepedidos ip
+on p.id = ip.idpedido
+GROUP BY Dia
+ORDER BY Dia;
+END;
+
+select * from Faturamentodiario;

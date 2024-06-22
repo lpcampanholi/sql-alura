@@ -162,14 +162,23 @@ CREATE TRIGGER CalculaFaturamentoDiario
 AFTER INSERT ON itensdepedidos
 FOR EACH ROW
 BEGIN
-DELETE FROM Faturamentodiario;
-INSERT INTO Faturamentodiario (Dia, faturamentototal)
-select DATE(p.datahorapedido) AS Dia, SUM(ip.precounitario) AS FaturamentoDiário
-from pedidos p
-JOIN itensdepedidos ip
-on p.id = ip.idpedido
-GROUP BY Dia
-ORDER BY Dia;
+  DELETE FROM Faturamentodiario;
+  INSERT INTO Faturamentodiario (Dia, faturamentototal)
+  SELECT DATE(p.datahorapedido) AS Dia, SUM(ip.precounitario) AS FaturamentoDiário
+  FROM pedidos p
+  JOIN itensdepedidos ip
+  ON p.id = ip.idpedido
+  GROUP BY Dia
+  ORDER BY Dia;
 END;
 
-select * from Faturamentodiario;
+SELECT * FROM Faturamentodiario;
+
+-- Testando o TRIGGER
+
+INSERT INTO pedidos (ID, idcliente, datahorapedido, status)
+VALUES (451, 27, '2023-10-07 14:30:00', 'Em Andamento');
+
+INSERT INTO itensdepedidos (idpedido, idproduto, quantidade, precounitario)
+VALUES (451, 14, 1, 6.0),
+       (451, 13, 1, 7.0);

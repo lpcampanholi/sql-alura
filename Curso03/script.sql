@@ -183,11 +183,47 @@ INSERT INTO itensdepedidos (idpedido, idproduto, quantidade, precounitario)
 VALUES (451, 14, 1, 6.0),
        (451, 13, 1, 7.0);
 
--- Valida chaves estrangeiras
-PRAGMA froeign_keys = ON;
+-- Valida chaves estrangeiras / Faz o Cascade funcionar
+PRAGMA foreign_keys = ON;
 
 -- Atualizando dados
 
 UPDATE produtos SET preco = 13.0 WHERE id = 31;
 
 UPDATE produtos SET descricao = 'Croissant recheado com amêndoas' WHERE id = 28;
+
+-- Excluindo dados
+
+PRAGMA foreign_keys = ON;
+
+INSERT INTO pedidos (ID, idcliente, datahorapedido, status)
+VALUES (451, 27, '2023-10-07 14:30:00', 'Em Andamento');
+
+INSERT INTO itensdepedidos (idpedido, idproduto, quantidade, precounitario)
+VALUES (451, 14, 1, 6.0),
+       (451, 13, 1, 7.0);
+
+SELECT * FROM clientes WHERE ID = 27;
+SELECT * FROM pedidos WHERE idcliente = 27;
+SELECT * FROM itensdepedidos WHERE idpedido = 451;
+
+DELETE FROM clientes WHERE ID = 27;
+
+-- TRANSAÇÕES
+
+-- Começar Transação
+BEGIN TRANSACTION;
+
+SELECT * FROM clientes;
+
+SELECT * FROM pedidos;
+
+UPDATE pedidos SET status = 'Concluído' WHERE status = 'Em andamento';
+
+DELETE FROM clientes;
+
+--Voltar
+ROLLBACK;
+
+-- Salvar
+COMMIT;

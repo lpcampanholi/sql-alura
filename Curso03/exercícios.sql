@@ -17,15 +17,18 @@ SELECT * FROM produtos WHERE preco > 10 AND preco < 15;
 
 SELECT nome, cargo
 FROM colaboradores
-WHERE datacontratacao > '2022-01-01' AND datacontratacao < '2022-06-31'
+WHERE datacontratacao BETWEEN '2022-01-01' AND '2022-06-31'
 ORDER BY datacontratacao;
 
 -- 5. Recupere o nome do cliente que fez o primeiro pedido.
 
-SELECT c.nome
-FROM clientes c
-JOIN pedidos p ON c.id = p.idcliente
-WHERE p.id = 1;
+SELECT nome
+FROM clientes
+WHERE id = (
+  SELECT idcliente
+  FROM pedidos
+  ORDER BY datahorapedido ASC
+);
 
 -- 6. Liste os produtos que nunca foram pedidos.
 
@@ -42,17 +45,23 @@ INSERT INTO produtos (id, nome, descricao, preco, categoria) VALUES
 (40, 'Pão de forma', 'Pão de forma integral', 5.5, 'Padaria'),
 (41, 'Manteiga', 'Manteiga sem sal', 9.0, 'Padaria');
 
-SELECT ip.idpedido, p.id, ip.quantidade, p.preco, ip.precounitario
-FROM itensdepedidos ip
-RIGHT JOIN produtos p ON ip.idproduto = p.id
-WHERE idpedido IS NULL;
+SELECT p.id, p.nome
+FROM produtos p
+LEFT JOIN itensdepedidos ip ON p.id = ip.idproduto
+WHERE ip.idproduto IS NULL;
+
+SELECT nome
+FROM produtos
+WHERE id NOT IN (
+  SELECT idProduto
+  FROM ItensPedido);
 
 -- 7. Liste os nomes dos clientes que fizeram pedidos entre 2023-01-01 e 2023-12-31.
 
-SELECT p.id, c.nome, p.datahorapedido
+SELECT DISTINCT p.id, c.nome, p.datahorapedido
 FROM pedidos p
 JOIN clientes c ON p.idcliente = c.id
-WHERE p.datahorapedido > '2023-01-01' AND p.datahorapedido < '2023-12-31'
+WHERE p.datahorapedido BETWEEN '2023-01-01' AND '2023-12-31'
 ORDER BY p.datahorapedido;
 
 -- 8. Recupere os nomes dos produtos que estão em menos de 15 pedidos.
@@ -66,5 +75,20 @@ HAVING qtdPorPedido < 15;
 
 -- 9. Liste os produtos e o ID do pedido que foram realizados pelo cliente "Pedro Alves" ou pela cliente "Ana Rodrigues".
 
--- 10. 0Recupere o nome e o ID do cliente que mais comprou(valor) no Serenatto.
+SELECT p.id, c.nome, pr.nome
+FROM pedidos p
+JOIN itensdepedidos ip ON ip.idpedido = p.id
+JOIN produtos pr ON ip.idproduto = pr.id
+JOIN clientes c ON p.idcliente = c.id
+WHERE c.nome IN ('Pedro Alves', 'Ana Rodrigues')
+ORDER BY c.nome;
 
+-- 10. Recupere o nome e o ID do cliente que mais comprou(valor) no Serenatto.
+
+SELECT c.id, c.nome, SUM(ip.quantidade * ip.precounitario) AS ValorTotal
+FROM pedidos p
+JOIN itensdepedidos ip ON ip.idpedido = p.id
+JOIN clientes c ON p.idcliente = c.id
+GROUP BY c.id, c.nome
+ORDER BY ValorTotal DESC
+LIMIT 1;

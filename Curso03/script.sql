@@ -150,7 +150,6 @@ WHERE strftime('%m', datahorapedido) = '08';
 
 DROP VIEW ViewTelefonesClientes;
 
-
 -- TRIGGER
 
 CREATE TABLE Faturamentodiario (
@@ -225,5 +224,5 @@ DELETE FROM clientes;
 --Voltar
 ROLLBACK;
 
--- Salvar
+-- Confirmar comandos
 COMMIT;

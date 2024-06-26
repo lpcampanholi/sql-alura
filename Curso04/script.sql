@@ -1,3 +1,5 @@
+-- Estudando o Banco de Dados
+
 SELECT * FROM categorias;
 SELECT * FROM marcas;
 select * from fornecedores;
@@ -81,7 +83,44 @@ FROM itens_venda iv
 JOIN vendas v ON iv.venda_id = v.id_venda
 JOIN produtos p ON iv.produto_id = p.id_produto
 JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
+WHERE strftime('%m', v.data_venda) = '11'
 GROUP BY nome_fornecedor, "Ano/Mes"
-ORDER BY nome_fornecedor;
+ORDER BY "Ano/Mes", Qtd_Vendas DESC;
 
 -- Categorias de produtos na Black frinday
+
+SELECT strftime('%Y', v.data_venda) AS Ano, c.nome_categoria AS Nome_Categoria, COUNT(iv.produto_id) AS QtdVendas
+FROM itens_venda iv
+JOIN vendas v ON iv.venda_id = v.id_venda
+JOIN produtos p ON iv.produto_id = p.id_produto
+JOIN categorias c ON p.categoria_id = c.id_categoria
+WHERE strftime('%m', v.data_venda) = '11'
+GROUP BY c.nome_categoria, Ano
+ORDER BY Ano, QtdVendas DESC;
+
+
+-- Soma das Vendas (mostrar que os dados estão atualizados)
+
+SELECT SUM(Qtd_Vendas)
+FROM (
+  SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS nome_fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
+  FROM itens_venda iv
+  JOIN vendas v ON iv.venda_id = v.id_venda
+  JOIN produtos p ON iv.produto_id = p.id_produto
+  JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
+  GROUP BY nome_fornecedor, "Ano/Mes"
+  ORDER BY "Ano/Mes", Qtd_Vendas DESC
+);
+
+SELECT COUNT(venda_id) FROM itens_venda;
+
+-- Performace da NebulaNetworks (fornecedor)
+
+SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", COUNT(iv.produto_id) AS Qtd_Vendas
+FROM itens_venda iv
+JOIN vendas v ON iv.venda_id = v.id_venda
+JOIN produtos p ON iv.produto_id = p.id_produto
+JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
+WHERE f.nome = 'NebulaNetworks'
+GROUP BY f.nome, "Ano/Mes"
+ORDER BY "Ano/Mes";

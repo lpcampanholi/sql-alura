@@ -78,16 +78,16 @@ ORDER BY Ano;
 
 -- Papel dos fornecedores na Black Friday
 
-SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS nome_fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
+SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS Nome_Fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
 FROM itens_venda iv
 JOIN vendas v ON iv.venda_id = v.id_venda
 JOIN produtos p ON iv.produto_id = p.id_produto
 JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
 WHERE strftime('%m', v.data_venda) = '11'
-GROUP BY nome_fornecedor, "Ano/Mes"
+GROUP BY Nome_Fornecedor, "Ano/Mes"
 ORDER BY "Ano/Mes", Qtd_Vendas DESC;
 
--- Categorias de produtos na Black frinday
+-- Categorias de produtos na Black Frinday
 
 SELECT strftime('%Y', v.data_venda) AS Ano, c.nome_categoria AS Nome_Categoria, COUNT(iv.produto_id) AS QtdVendas
 FROM itens_venda iv
@@ -103,12 +103,12 @@ ORDER BY Ano, QtdVendas DESC;
 
 SELECT SUM(Qtd_Vendas)
 FROM (
-  SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS nome_fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
+  SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS Nome_Fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
   FROM itens_venda iv
   JOIN vendas v ON iv.venda_id = v.id_venda
   JOIN produtos p ON iv.produto_id = p.id_produto
   JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
-  GROUP BY nome_fornecedor, "Ano/Mes"
+  GROUP BY Nome_Fornecedor, "Ano/Mes"
   ORDER BY "Ano/Mes", Qtd_Vendas DESC
 );
 
@@ -124,3 +124,66 @@ JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
 WHERE f.nome = 'NebulaNetworks'
 GROUP BY f.nome, "Ano/Mes"
 ORDER BY "Ano/Mes";
+
+-- Comparação entre Fornecedores (Nebula Networks, HorizonDistributors e AstroSupply)
+
+SELECT "Ano/Mes",
+SUM (CASE WHEN Nome_Fornecedor == 'NebulaNetworks' THEN Qtd_Vendas ELSE 0 END) AS Qtd_Vendas_NebulaNetworks,
+SUM (CASE WHEN Nome_Fornecedor == 'HorizonDistributors' THEN Qtd_Vendas ELSE 0 END) AS Qtd_Vendas_HorizonDistributors,
+SUM (CASE WHEN Nome_Fornecedor == 'AstroSupply' THEN Qtd_Vendas ELSE 0 END) AS Qtd_Vendas_AstroSupply
+FROM (
+  SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mes", f.nome AS Nome_Fornecedor, COUNT(iv.produto_id) AS Qtd_Vendas
+  FROM itens_venda iv
+  JOIN vendas v ON iv.venda_id = v.id_venda
+  JOIN produtos p ON iv.produto_id = p.id_produto
+  JOIN fornecedores f ON p.fornecedor_id = f.id_fornecedor
+  WHERE Nome_Fornecedor IN ('NebulaNetworks', 'HorizonDistributors', 'AstroSupply')
+  GROUP BY Nome_Fornecedor, "Ano/Mes"
+  ORDER BY "Ano/Mes", Qtd_Vendas
+)
+GROUP BY "Ano/Mes";
+
+
+-- Porcentagem das Categorias
+
+SELECT Nome_Categoria, Qtd_Vendas, ROUND(100.0*Qtd_Vendas/(SELECT COUNT(*) FROM itens_venda), 2) || '%' AS Porcentagem
+FROM (
+  SELECT c.nome_categoria AS Nome_Categoria, COUNT(iv.produto_id) AS Qtd_Vendas
+  FROM itens_venda iv
+  JOIN produtos p ON iv.produto_id = p.id_produto
+  JOIN categorias c ON p.categoria_id = c.id_categoria
+  GROUP BY c.nome_categoria
+  ORDER BY Qtd_Vendas DESC
+  )
+;
+
+-- Porcentagem das Marcas
+
+SELECT Nome_Marca, Qtd_Vendas, ROUND(100.0*Qtd_Vendas/(SELECT COUNT(*) FROM itens_venda), 2) AS Porcentagem
+FROM (
+  SELECT m.nome AS Nome_Marca, COUNT(iv.venda_id) AS Qtd_Vendas
+  FROM itens_venda iv
+  JOIN produtos p ON iv.produto_id = p.id_produto
+  JOIN marcas m ON p.marca_id = m.id_marca
+  GROUP BY Nome_Marca
+  )
+ORDER BY Porcentagem DESC;
+
+
+-- Soma das Porcentagens (Retorno: 100%)
+
+SELECT SUM(Porcentagem)
+FROM (
+  SELECT Nome_Marca, Qtd_Vendas, ROUND(100.0*Qtd_Vendas/(SELECT COUNT(*) FROM itens_venda), 2) AS Porcentagem
+  FROM (
+    SELECT m.nome AS Nome_Marca, COUNT(iv.venda_id) AS Qtd_Vendas
+    FROM itens_venda iv
+    JOIN produtos p ON iv.produto_id = p.id_produto
+    JOIN marcas m ON p.marca_id = m.id_marca
+    GROUP BY Nome_Marca
+    )
+  )
+;
+
+-- Porcentagem dos Fornecedores
+

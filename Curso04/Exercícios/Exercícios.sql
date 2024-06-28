@@ -66,18 +66,31 @@ LIMIT 2;
 
 -- 08 - Crie uma tabela comparando as vendas ao longo do tempo das duas categorias que mais venderam no total de todos os anos.
 
-
+SELECT "Ano/Mês",
+SUM(CASE WHEN Categoria = 'Eletrônicos' THEN Qtd_Vendas ELSE 0 END) AS Eletrônicos,
+SUM(CASE WHEN Categoria = 'Vestuário' THEN Qtd_Vendas ELSE 0 END) AS Vestuário
+FROM(
+  SELECT strftime('%Y/%m', v.data_venda) AS "Ano/Mês", c.nome_categoria AS Categoria, COUNT(iv.produto_id) AS Qtd_Vendas
+  FROM itens_venda iv
+  JOIN vendas v ON v.id_venda = iv.venda_id
+  JOIN PRODUTOS p ON p.id_produto = iv.produto_id
+  JOIN CATEGORIAS c ON c.id_categoria = p.categoria_id
+  WHERE Categoria IN ('Eletrônicos', 'Vestuário')
+  GROUP BY "Ano/Mês", Categoria
+  ORDER BY "Ano/Mês", Categoria
+)
+GROUP BY "Ano/Mês"
+;
 
 -- 09 - Calcule a porcentagem de vendas por categorias no ano de 2022.
 
-WITH Total de vendas em 2022 AS (
-SELECT COUNT(*) AS Total_Vendas_2022
-FROM itens_venda iv
-JOIN vendas v ON v.id_venda = iv.venda_id
-WHERE strftime('%Y', v.data_venda) = '2022'
-)
-SELECT Categoria, Qtd_Vendas, ROUND(100.0*Qtd_Vendas/Total_Vendas_2022, 2) || '%' AS Porcentagem
-FROM (
+WITH Total_Vendas_2022 AS (
+  SELECT COUNT(*) AS Total_Vendas
+  FROM itens_venda iv
+  JOIN vendas v ON v.id_venda = iv.venda_id
+  WHERE strftime('%Y', v.data_venda) = '2022'
+),
+Vendas_Por_Categorias_2022 AS (
   SELECT c.nome_categoria AS Categoria, COUNT(iv.produto_id) AS Qtd_Vendas
   FROM vendas v
   JOIN itens_venda iv ON v.id_venda = iv.venda_id
@@ -87,6 +100,8 @@ FROM (
   GROUP BY Categoria
   ORDER BY Qtd_Vendas DESC
 )
+SELECT vc.Categoria, vc.Qtd_Vendas, ROUND(100.0*vc.Qtd_Vendas/tv.Total_Vendas, 2) || '%' AS Porcentagem
+FROM Total_Vendas_2022 tv, Vendas_Por_Categorias_2022 vc
 ;
 
 -- 10 - Crie uma métrica mostrando a porcentagem de vendas a mais que a melhor categoria tem em relação a pior no ano de 2022.

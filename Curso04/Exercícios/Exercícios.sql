@@ -105,3 +105,18 @@ FROM Total_Vendas_2022 tv, Vendas_Por_Categorias_2022 vc
 ;
 
 -- 10 - Crie uma métrica mostrando a porcentagem de vendas a mais que a melhor categoria tem em relação a pior no ano de 2022.
+
+WITH Categorias_Mais_Vendidas_2022 AS (
+  SELECT c.nome_categoria AS Categoria, COUNT(iv.produto_id) AS Qtd_Vendas
+  FROM vendas v
+  JOIN itens_venda iv ON v.id_venda = iv.venda_id
+  JOIN produtos p ON iv.produto_id = p.id_produto
+  JOIN categorias c ON p.categoria_id = c.id_categoria
+  WHERE strftime('%Y', v.data_venda) = '2022'
+  GROUP BY Categoria
+)
+SELECT MAX(cv.Qtd_Vendas) AS Categoria_Mais_Vendida_2022,
+MIN(cv.Qtd_Vendas) AS Categoria_Menos_Vendida_2022,
+ROUND(100.0*MAX(cv.Qtd_Vendas)/MIN(cv.Qtd_Vendas), 2) || '%' AS Porcentagem_De_Aumento
+FROM Categorias_Mais_Vendidas_2022 cv
+;

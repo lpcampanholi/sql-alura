@@ -8,7 +8,7 @@ SELECT n.nota, a.Nome_Aluno
 FROM Notas n 
 JOIN Disciplinas d ON n.ID_Disciplina = d.ID_Disciplina
 JOIN Alunos a ON n.ID_Aluno = a.ID_Aluno
-WHERE nome_disciplina = 'Matemática' AND Nota > 6.0;
+WHERE d.nome_disciplina = 'Matemática' AND n.Nota > 6.0;
 
 -- Consulta 3: Identificar o total de disciplinas por turma
 

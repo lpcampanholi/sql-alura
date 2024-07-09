@@ -33,7 +33,7 @@ CREATE TABLE hospedagens (
 );
 
 CREATE TABLE alugueis (
-  alugel_id VARCHAR(255) PRIMARY KEY,
+  aluguel_id VARCHAR(255) PRIMARY KEY,
   cliente_id VARCHAR(255),
   hospedagem_id VARCHAR(255),
   data_inicio DATE,

@@ -42,9 +42,56 @@ GROUP BY produto_id;
 
 -- Top 10 proprietários com mais hospedagens ativas na plataforma
 
-SELECT proprietario_id AS proprietario, COUNT(hospedagem_id) AS qtd_hospedagens
-FROM hospedagens
-WHERE ativo = 1
-GROUP BY proprietario_id
-ORDER BY qtd_hospedagens
+SELECT p.nome AS proprietario, COUNT(h.hospedagem_id) AS qtd_hospedagens_ativas
+FROM hospedagens h
+JOIN proprietarios p ON h.proprietario_id = p.proprietario_id
+WHERE h.ativo = 1
+GROUP BY h.proprietario_id
+ORDER BY qtd_hospedagens_ativas DESC
 LIMIT 10;
+
+-- Proprietários com hospedagens inativas na plataforma
+
+SELECT p.nome AS proprietario, COUNT(h.hospedagem_id) AS qtd_hospedagens_inativas
+FROM hospedagens h
+JOIN proprietarios p ON h.proprietario_id = p.proprietario_id
+WHERE h.ativo = 0
+GROUP BY h.proprietario_id
+ORDER BY qtd_hospedagens_inativas DESC;
+
+-- Meses com maior e menor demanda de aluguel
+
+SELECT
+YEAR(data_inicio) AS ano,
+MONTH(data_inicio) AS mes,
+COUNT(*) AS total_alugueis
+FROM alugueis
+GROUP BY ano, mes
+ORDER BY total_alugueis DESC;
+
+-- Adicionar Colunas a Tabela
+
+ALTER TABLE proprietarios
+ADD COLUMN qtd_hospedagens INT;
+
+-- Alterar nome da Tabela "alugueis" para "reservas"
+
+ALTER TABLE alugueis RENAME TO reservas;
+
+-- Alterar nome do campo "aluguel_id" para "reserva_id"
+
+ALTER TABLE reservas RENAME COLUMN aluguel_id TO reserva_id;
+
+-- Deletar coluna de uma Tabela
+
+ALTER TABLE proprietarios DROP COLUMN qtd_hospedagens;
+
+-- Atualizar Dados
+
+UPDATE hospedagens SET ativo = 1 WHERE hospedagem_id IN ('1', '10', '100');
+
+UPDATE proprietarios SET contato = 'daniela_120@email.com' WHERE proprietario_id = '1009';
+
+-- Deletar Dados
+
+DELETE FROM proprietarios WHERE 
